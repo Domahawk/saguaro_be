@@ -1,10 +1,8 @@
 FROM ubuntu:20.04
 
-LABEL maintainer="Taylor Otwell"
-
 ARG WWWGROUP
-ARG NODE_VERSION=16
-ARG POSTGRES_VERSION=13
+ARG WWWUSER
+ARG NODE_VERSION=14
 
 WORKDIR /var/www/html
 
@@ -47,7 +45,7 @@ RUN update-alternatives --set php /usr/bin/php8.0
 RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.0
 
 RUN groupadd --force -g $WWWGROUP sail
-RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u 1337 sail
+RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u $WWWUSER sail
 
 COPY start-container /usr/local/bin/start-container
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
