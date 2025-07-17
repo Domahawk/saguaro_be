@@ -8,29 +8,38 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Response;
 
 class AuthController extends Controller
 {
-    public function login(LoginUserRequest $request): array
+    public function login(LoginUserRequest $request): JsonResponse
     {
         $data = $request->validated();
 
         $user = User::where('email', $data['email'])->first();
 
         if (!$user || !Hash::check($data['password'], $user->password)) {
-            //fuckoff
-            return [
-                'message' => 'Incorrect email or password'
-            ];
+            return Response::json(
+                [
+                    'message' => 'Authentication failed',
+                    'errors' => [
+                        ['Incorrect email or password']
+                    ]
+                ],
+                422,
+            );
         }
         // create token
 
         $token = $user->createToken('token')->plainTextToken;
 
-        return [
-            'message' => 'Login success!',
-            'token' => $token,
-        ];
+
+        return Response::json(
+            [
+                'message' => 'Login success!',
+                'token' => $token,
+            ]
+        );
     }
 
     public function logout(Request $request): array
