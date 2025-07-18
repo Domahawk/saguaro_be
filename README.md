@@ -36,3 +36,6 @@ php artisan db:seed
 ```
 
 You can now exit the container and start consuming the API.
+
+If you are missing `.env` file, `.env.example` is provided in the project, which contains all dev ENV variables to run the app.
+You can just copy/paste `.env.example` and rename it to `.env`
