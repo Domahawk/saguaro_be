@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\UserStoreRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -22,9 +23,17 @@ class UserController extends Controller
         return User::all();
     }
 
-    public function store(Request $request)
+    public function store(UserStoreRequest $request): JsonResponse
     {
-        //
+        $data = $request->validated();
+
+        User::create($data);
+
+        return Response::json(
+            [
+                'message' => 'User created successfully.',
+            ]
+        );
     }
 
     public function show(User $user): JsonResponse
